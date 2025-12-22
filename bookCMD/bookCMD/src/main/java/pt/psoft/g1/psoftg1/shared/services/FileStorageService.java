@@ -69,24 +69,8 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(final String prefix, final MultipartFile file) {
-        //final String fileName = prefix + "_" + determineFileName(file);
-        //files will contain only the generated uuid passed as prefix
-        final String fileName = prefix + "." + getExtension(file.getOriginalFilename()).orElse("");
-
-        // Copy file to the target location (Replacing existing file with the same name)
-        try {
-            final Path targetLocation = fileStorageLocation.resolve(fileName);
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-
-            return fileName;
-        } catch (final IOException ex) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
-        }
-    }
-
     public void deleteFile(String file) {
-        if(file == null) {
+        if (file == null) {
             throw new IllegalArgumentException("Received null reference to file path");
         }
 
@@ -98,92 +82,4 @@ public class FileStorageService {
         }
     }
 
-    public byte[] getFile(final String fileName) {
-        String photoPathString = this.fileStorageLocation + "/" + fileName;
-        Path photoPath = Paths.get(photoPathString);
-        byte[] image = null;
-        try {
-            image = Files.readAllBytes(photoPath);
-        } catch(IOException e) {
-            return null;
-        }
-
-        return image;
-    }
-
-    //Returns the string of the fileName of the file (UUID.FILE_FORMAT) stored in the uploads folder | null for error or no photo
-    public String getRequestPhoto(MultipartFile file) {
-        UploadFileResponse up = null;
-        if(file != null) {
-            if(file.getSize() > photoMaxSize) {
-                throw new ValidationException("Attached photo can't be bigger than " + photoMaxSize + " bytes");
-            }
-
-            int formatIndex = -1;
-            String fileContentHeader = file.getContentType();
-
-            if(fileContentHeader == null) {
-                throw new ValidationException("Unknown file content header");
-            }
-
-            for(int i = 0; i < validImageFormats.length; i++) {
-                if(!fileContentHeader.equals(validImageFormats[i])) {
-                    continue;
-                }
-
-                formatIndex = i;
-                break;
-            }
-
-            if(formatIndex == -1) {
-                throw new ValidationException("Images can only be png or jpeg");
-            }
-
-            String photoUUID = UUID.randomUUID().toString();
-
-            try {
-                up = FileUtils.doUploadFile(this, photoUUID, file);
-            } catch (Exception e) {
-                return null;
-                //throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            //String fileFormat = validImageFormats[formatIndex].split("/")[1];
-            String originalFileName = file.getOriginalFilename();
-            String fileFormat = originalFileName.substring(originalFileName.lastIndexOf('.')+1);
-            return photoUUID+"."+fileFormat;
-        }
-
-        return null;
-    }
-
-    private String determineFileName(final MultipartFile file) {
-//		// Normalize file name
-//		final String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-//		// Check if the file's name contains invalid characters
-//		if (fileName.contains("..")) {
-//			throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
-//		}
-//		return fileName;
-
-        return UUID.randomUUID().toString() + "." + getExtension(file.getOriginalFilename()).orElse("");
-    }
-
-    public Optional<String> getExtension(final String filename) {
-        return Optional.ofNullable(filename).filter(f -> f.contains("."))
-                .map(f -> f.substring(filename.lastIndexOf(".") + 1));
-    }
-
-    public Resource loadFileAsResource(final String fileName) {
-        try {
-            final Path filePath = fileStorageLocation.resolve(fileName).normalize();
-            final Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists()) {
-                return resource;
-            }
-            throw new NotFoundException("File not found " + fileName);
-        } catch (final MalformedURLException ex) {
-            throw new NotFoundException("File not found " + fileName, ex);
-        }
-    }
 }

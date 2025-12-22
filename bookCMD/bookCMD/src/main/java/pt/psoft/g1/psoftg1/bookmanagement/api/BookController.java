@@ -42,10 +42,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api/books")
 public class BookController {
+
     private final BookService bookService;
-    private final LendingService lendingService;
-    private final ConcurrencyService concurrencyService;
-    private final FileStorageService fileStorageService;
     private final UserService userService;
     private final ReaderService readerService;
 
@@ -54,8 +52,7 @@ public class BookController {
     @Operation(summary = "Register a new Book")
     @PutMapping(value = "/{isbn}")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<BookView> create( CreateBookRequest resource, @PathVariable("isbn") String isbn) {
-
+    public ResponseEntity<BookView> create(CreateBookRequest resource, @PathVariable("isbn") String isbn) {
 
         //Guarantee that the client doesn't provide a link on the body, null = no photo or error
         resource.setPhotoURI(null);
@@ -70,7 +67,7 @@ public class BookController {
         Book book;
         try {
             book = bookService.create(resource, isbn);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         //final var savedBook = bookService.save(book);
@@ -101,7 +98,7 @@ public class BookController {
     public ResponseEntity<Void> deleteBookPhoto(@PathVariable("isbn") final String isbn) {
 
         var book = bookService.findByIsbn(isbn);
-        if(book.getPhoto() == null) {
+        if (book.getPhoto() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
@@ -111,15 +108,15 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary= "Gets a book photo")
+    @Operation(summary = "Gets a book photo")
     @GetMapping("/{isbn}/photo")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<byte[]> getSpecificBookPhoto(@PathVariable("isbn") final String isbn){
+    public ResponseEntity<byte[]> getSpecificBookPhoto(@PathVariable("isbn") final String isbn) {
 
         Book book = bookService.findByIsbn(isbn);
 
         //In case the user has no photo, just return a 200 OK without body
-        if(book.getPhoto() == null) {
+        if (book.getPhoto() == null) {
             return ResponseEntity.ok().build();
         }
 
@@ -127,7 +124,7 @@ public class BookController {
         byte[] image = fileStorageService.getFile(photoFile);
         String fileFormat = fileStorageService.getExtension(book.getPhoto().getPhotoFile()).orElseThrow(() -> new ValidationException("Unable to get file extension"));
 
-        if(image == null) {
+        if (image == null) {
             return ResponseEntity.ok().build();
         }
 
@@ -135,12 +132,11 @@ public class BookController {
 
     }
 
-
     @Operation(summary = "Updates a specific Book")
     @PatchMapping(value = "/{isbn}")
     public ResponseEntity<BookView> updateBook(@PathVariable final String isbn,
-                                               final WebRequest request,
-                                               @Valid final UpdateBookRequest resource) {
+            final WebRequest request,
+            @Valid final UpdateBookRequest resource) {
 
         final String ifMatchValue = request.getHeader(ConcurrencyService.IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty() || ifMatchValue.equals("null")) {
@@ -160,8 +156,8 @@ public class BookController {
         resource.setIsbn(isbn);
         try {
             book = bookService.update(resource, String.valueOf(concurrencyService.getVersionFromIfMatchHeader(ifMatchValue)));
-        }catch (Exception e){
-            throw new ConflictException("Could not update book: "+ e.getMessage());
+        } catch (Exception e) {
+            throw new ConflictException("Could not update book: " + e.getMessage());
         }
         return ResponseEntity.ok()
                 .eTag(Long.toString(book.getVersion()))
@@ -171,38 +167,44 @@ public class BookController {
     @Operation(summary = "Gets Books by title or genre")
     @GetMapping
     public ListResponse<BookView> findBooks(@RequestParam(value = "title", required = false) final String title,
-                                            @RequestParam(value = "genre", required = false) final String genre,
-                                            @RequestParam(value = "authorName", required = false) final String authorName) {
+            @RequestParam(value = "genre", required = false) final String genre,
+            @RequestParam(value = "authorName", required = false) final String authorName) {
 
         //Este método, como está, faz uma junção 'OR'.
         //Para uma junção 'AND', ver o "/search"
-
         List<Book> booksByTitle = null;
-        if (title != null)
+        if (title != null) {
             booksByTitle = bookService.findByTitle(title);
+        }
 
         List<Book> booksByGenre = null;
-        if (genre != null)
+        if (genre != null) {
             booksByGenre = bookService.findByGenre(genre);
+        }
 
         List<Book> booksByAuthorName = null;
-        if (authorName != null)
+        if (authorName != null) {
             booksByAuthorName = bookService.findByAuthorName(authorName);
+        }
 
         Set<Book> bookSet = new HashSet<>();
-        if (booksByTitle!= null)
+        if (booksByTitle != null) {
             bookSet.addAll(booksByTitle);
-        if(booksByGenre != null)
+        }
+        if (booksByGenre != null) {
             bookSet.addAll(booksByGenre);
-        if(booksByAuthorName != null)
+        }
+        if (booksByAuthorName != null) {
             bookSet.addAll(booksByAuthorName);
+        }
 
         List<Book> books = bookSet.stream()
                 .sorted(Comparator.comparing(b -> b.getTitle().toString()))
                 .collect(Collectors.toList());
 
-        if(books.isEmpty())
+        if (books.isEmpty()) {
             throw new NotFoundException("No books found with the provided criteria");
+        }
 
         return new ListResponse<>(bookViewMapper.toBookView(books));
     }
@@ -225,7 +227,8 @@ public class BookController {
 
     @Operation(summary = "Get average lendings duration")
     @GetMapping(value = "/{isbn}/avgDuration")
-    public @ResponseBody ResponseEntity<BookAverageLendingDurationView>getAvgLendingDurationByIsbn(
+    public @ResponseBody
+    ResponseEntity<BookAverageLendingDurationView> getAvgLendingDurationByIsbn(
             @PathVariable("isbn") final String isbn) {
         final var book = bookService.findByIsbn(isbn);
         Double avgDuration = lendingService.getAvgLendingDurationByIsbn(isbn);
@@ -240,4 +243,3 @@ public class BookController {
         return new ListResponse<>(bookViewMapper.toBookView(bookList));
     }
 }
-
