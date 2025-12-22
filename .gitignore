@@ -1,0 +1,8 @@
+bin/
+obj/
+target/
+.vscode/
+.idea/
+*.log
+*.tmp
+.DS_Store
