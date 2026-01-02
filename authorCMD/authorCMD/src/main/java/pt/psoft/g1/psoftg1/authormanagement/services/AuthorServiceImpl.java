@@ -8,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import pt.psoft.g1.psoftg1.authormanagement.api.AuthorLendingView;
 import pt.psoft.g1.psoftg1.authormanagement.model.Author;
 import pt.psoft.g1.psoftg1.authormanagement.repositories.AuthorRepository;
-import pt.psoft.g1.psoftg1.bookmanagement.model.Book;
-import pt.psoft.g1.psoftg1.bookmanagement.repositories.BookRepository;
 import pt.psoft.g1.psoftg1.exceptions.NotFoundException;
 import pt.psoft.g1.psoftg1.shared.repositories.PhotoRepository;
 
@@ -19,25 +17,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
+
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
     private final AuthorMapper mapper;
     private final PhotoRepository photoRepository;
-
-    @Override
-    public Iterable<Author> findAll() {
-        return authorRepository.findAll();
-    }
-
-    @Override
-    public Optional<Author> findByAuthorNumber(final Long authorNumber) {
-        return authorRepository.findByAuthorNumber(authorNumber);
-    }
-
-    @Override
-    public List<Author> findByName(String name) {
-        return authorRepository.searchByNameNameStartsWith(name);
-    }
 
     @Override
     public Author create(final CreateAuthorRequest resource) {
@@ -55,10 +38,13 @@ public class AuthorServiceImpl implements AuthorService {
 
         MultipartFile photo = resource.getPhoto();
         String photoURI = resource.getPhotoURI();
-        if(photo == null && photoURI != null || photo != null && photoURI == null) {
+        if (photo == null && photoURI != null || photo != null && photoURI == null) {
             resource.setPhoto(null);
             resource.setPhotoURI(null);
         }
+        eventPublisher.publish(
+                new AuthorCreatedEvent(author.getAuthorNumber(), author.getName())
+        );
         final Author author = mapper.create(resource);
         return authorRepository.save(author);
     }
@@ -67,8 +53,6 @@ public class AuthorServiceImpl implements AuthorService {
     public Author partialUpdate(final Long authorNumber, final UpdateAuthorRequest request, final long desiredVersion) {
         // first let's check if the object exists so we don't create a new object with
         // save
-        final var author = findByAuthorNumber(authorNumber)
-                .orElseThrow(() -> new NotFoundException("Cannot update an object that does not yet exist"));
         /*
          * Since photos can be null (no photo uploaded) that means the URI can be null as well.
          * To avoid the client sending false data, photoURI has to be set to any value / null
@@ -83,7 +67,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         MultipartFile photo = request.getPhoto();
         String photoURI = request.getPhotoURI();
-        if(photo == null && photoURI != null || photo != null && photoURI == null) {
+        if (photo == null && photoURI != null || photo != null && photoURI == null) {
             request.setPhoto(null);
             request.setPhotoURI(null);
         }
@@ -96,21 +80,7 @@ public class AuthorServiceImpl implements AuthorService {
         // this updated object
         return authorRepository.save(author);
     }
-    @Override
-    public List<AuthorLendingView> findTopAuthorByLendings() {
-        Pageable pageableRules = PageRequest.of(0,5);
-        return authorRepository.findTopAuthorByLendings(pageableRules).getContent();
-    }
 
-    @Override
-    public List<Book> findBooksByAuthorNumber(Long authorNumber){
-        return bookRepository.findBooksByAuthorNumber(authorNumber);
-    }
-
-    @Override
-    public List<Author> findCoAuthorsByAuthorNumber(Long authorNumber) {
-        return authorRepository.findCoAuthorsByAuthorNumber(authorNumber);
-    }
     @Override
     public Optional<Author> removeAuthorPhoto(Long authorNumber, long desiredVersion) {
         Author author = authorRepository.findByAuthorNumber(authorNumber)
@@ -124,4 +94,3 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
 }
-
