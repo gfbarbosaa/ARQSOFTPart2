@@ -62,11 +62,6 @@ public class AuthorServiceImpl implements AuthorService {
             String bio,
             String photoUri
     ) {
-        // 🔒 Idempotência: se já existe, ignora o evento
-        boolean exists = authorRepository.existsByAuthorNumber(authorNumber);
-        if (exists) {
-            return;
-        }
 
         Author author = new Author();
         author.setAuthorNumber(authorNumber);

@@ -59,4 +59,23 @@ public class AuthorServiceImpl implements AuthorService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeAuthorPhoto'");
     }
+
+    public void createFromEvent(
+            Long authorNumber,
+            String name,
+            String bio,
+            String photoUri
+    ) {
+
+        Author author = new Author();
+        author.setAuthorNumber(authorNumber);
+        author.setName(name);
+        author.setBio(bio);
+
+        if (photoUri != null) {
+            author.addPhoto(photoUri);
+        }
+
+        authorRepository.save(author);
+    }
 }
