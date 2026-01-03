@@ -1,7 +1,8 @@
 package pt.psoft.g1.psoftg1.authormanagement.api.Publisher;
 
+import org.springframework.stereotype.Component;
+
 @Component
-@Profile("!test")
 public class RabbitMQAuthorPublisher implements AuthorMessagePublisher {
 
     private final RabbitTemplate rabbitTemplate;

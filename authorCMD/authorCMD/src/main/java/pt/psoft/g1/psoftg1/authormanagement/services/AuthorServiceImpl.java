@@ -11,7 +11,6 @@ import pt.psoft.g1.psoftg1.authormanagement.model.messages.AuthorCreatedMessage;
 import pt.psoft.g1.psoftg1.authormanagement.repositories.AuthorRepository;
 import pt.psoft.g1.psoftg1.exceptions.NotFoundException;
 import pt.psoft.g1.psoftg1.shared.repositories.PhotoRepository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,7 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorMapper mapper;
     @org.springframework.beans.factory.annotation.Autowired
     private PhotoRepository photoRepository;
+    @org.springframework.beans.factory.annotation.Autowired
     private final AuthorMessagePublisher publisher;
 
     @Override
