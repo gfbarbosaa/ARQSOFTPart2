@@ -1,4 +1,4 @@
-package pt.psoft.g1.psoftg1.authormanagement.domain.messages;
+package pt.psoft.g1.psoftg1.authormanagement.model.messages;
 
 import java.util.UUID;
 

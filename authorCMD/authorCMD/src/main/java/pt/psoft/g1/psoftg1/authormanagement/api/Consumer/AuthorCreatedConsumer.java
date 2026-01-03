@@ -2,16 +2,17 @@ package pt.psoft.g1.psoftg1.authormanagement.api.Consumer;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-import pt.psoft.g1.psoftg1.authormanagement.services;
-import pt.psoft.g1.psoftg1.authormanagement.api.messages.AuthorCreatedMessage;
-import pt.psoft.g1.psoftg1.config.RabbitMQConfig;
+
+import pt.psoft.g1.psoftg1.authormanagement.model.messages.AuthorCreatedMessage;
+import pt.psoft.g1.psoftg1.authormanagement.services.AuthorServiceImpl;
+import pt.psoft.g1.psoftg1.configuration.RabbitMQConfig;
 
 @Component
 public class AuthorCreatedConsumer {
 
-    private final AuthorReadService authorReadService;
+    private final AuthorServiceImpl authorReadService;
 
-    public AuthorCreatedConsumer(AuthorReadService authorReadService) {
+    public AuthorCreatedConsumer(AuthorServiceImpl authorReadService) {
         this.authorReadService = authorReadService;
     }
 
