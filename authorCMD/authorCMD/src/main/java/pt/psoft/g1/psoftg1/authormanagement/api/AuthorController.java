@@ -31,7 +31,6 @@ import java.util.Optional;
 
 @Tag(name = "Author", description = "Endpoints for managing Authors")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/authors")
 public class AuthorController {
 
@@ -39,6 +38,13 @@ public class AuthorController {
     private final AuthorViewMapper authorViewMapper;
     private final ConcurrencyService concurrencyService;
     private final FileStorageService fileStorageService;
+
+    public AuthorController(AuthorService authorService, AuthorViewMapper authorViewMapper, ConcurrencyService concurrencyService, FileStorageService fileStorageService) {
+        this.authorService = authorService;
+        this.authorViewMapper = authorViewMapper;
+        this.concurrencyService = concurrencyService;
+        this.fileStorageService = fileStorageService;
+    }
 
     //Create
     @Operation(summary = "Creates a new Author")

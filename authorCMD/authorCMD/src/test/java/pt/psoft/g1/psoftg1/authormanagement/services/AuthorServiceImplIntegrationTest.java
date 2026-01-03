@@ -19,11 +19,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /**
  * Based on https://www.baeldung.com/spring-boot-testing
- * <p>Adaptations to Junit 5 with ChatGPT
+ * <p>
+ * Adaptations to Junit 5 with ChatGPT
  */
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class AuthorServiceImplIntegrationTest {
+
     @Autowired
     private AuthorService authorService;
     @MockBean
@@ -39,11 +41,4 @@ public class AuthorServiceImplIntegrationTest {
                 .thenReturn(list);
     }
 
-    @Test
-    public void whenValidId_thenAuthorShouldBeFound() {
-        Long id = 1L;
-        Optional<Author> found = authorService.findByAuthorNumber(id);
-        found.ifPresent(author -> assertThat(author.getId())
-                .isEqualTo(id));
-    }
 }

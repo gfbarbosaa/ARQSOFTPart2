@@ -22,8 +22,6 @@ public abstract class AuthorViewMapper extends MapperInterface {
 
     @Mapping(target = "_links", source = "author", qualifiedByName = "mapAuthorLinks")
 
-    public abstract AuthorCoAuthorBooksView toAuthorCoAuthorBooksView(Author author, List<CoAuthorView> coauthors);
-
     @Named(value = "mapAuthorLinks")
     public Map<String, Object> mapLinks(final Author author) {
         String authorUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -47,8 +45,8 @@ public abstract class AuthorViewMapper extends MapperInterface {
     }
 
     protected String generatePhotoUrl(Author author) {
-        Long authorNumber = author.getAuthorNumber();
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/authors/{authorNumber}/photo").buildAndExpand(authorNumber).toUri().toString();
+        Long authorId = author.getId();
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/authors/{authorId}/photo").buildAndExpand(authorId).toUri().toString();
     }
 
 }

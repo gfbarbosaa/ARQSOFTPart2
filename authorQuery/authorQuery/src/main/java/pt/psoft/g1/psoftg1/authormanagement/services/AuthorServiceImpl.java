@@ -41,4 +41,22 @@ public class AuthorServiceImpl implements AuthorService {
     public List<Author> findCoAuthorsByAuthorNumber(Long authorNumber) {
         return authorRepository.findCoAuthorsByAuthorNumber(authorNumber);
     }
+
+    @Override
+    public List<Author> findByName(String name) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByName'");
+    }
+
+    @Override
+    public List<AuthorLendingView> findTopAuthorByLendings() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findTopAuthorByLendings'");
+    }
+
+    @Override
+    public Optional<Author> removeAuthorPhoto(Long authorNumber, long desiredVersion) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeAuthorPhoto'");
+    }
 }

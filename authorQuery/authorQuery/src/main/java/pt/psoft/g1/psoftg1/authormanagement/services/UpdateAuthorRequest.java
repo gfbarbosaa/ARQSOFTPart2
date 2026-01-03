@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAuthorRequest {
+
     @Size(max = 4096)
     private String bio;
 
@@ -16,12 +17,8 @@ public class UpdateAuthorRequest {
     private String name;
 
     @Nullable
-    @Getter
-    @Setter
     private MultipartFile photo;
 
     @Nullable
-    @Getter
-    @Setter
     private String photoURI;
 }

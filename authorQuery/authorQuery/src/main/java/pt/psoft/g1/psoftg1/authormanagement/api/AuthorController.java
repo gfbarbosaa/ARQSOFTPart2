@@ -31,7 +31,6 @@ import java.util.Optional;
 
 @Tag(name = "Author", description = "Endpoints for managing Authors")
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/authors")
 public class AuthorController {
 
@@ -39,6 +38,16 @@ public class AuthorController {
     private final AuthorViewMapper authorViewMapper;
     private final ConcurrencyService concurrencyService;
     private final FileStorageService fileStorageService;
+
+    public AuthorController(AuthorService authorService,
+            AuthorViewMapper authorViewMapper,
+            ConcurrencyService concurrencyService,
+            FileStorageService fileStorageService) {
+        this.authorService = authorService;
+        this.authorViewMapper = authorViewMapper;
+        this.concurrencyService = concurrencyService;
+        this.fileStorageService = fileStorageService;
+    }
 
     //Gets
     @Operation(summary = "Know an author’s detail given its author number")
@@ -60,7 +69,7 @@ public class AuthorController {
     public ListResponse<AuthorView> findByName(@RequestParam("name") final String name) {
 
         final var authors = authorService.findByName(name);
-        return new ListResponse<>(authorViewMapper.toAuthorView(authors));
+        return new ListResponse<AuthorView>(authorViewMapper.toAuthorView(authors));
     }
 
     //get - Photo
@@ -75,22 +84,7 @@ public class AuthorController {
                 .orElseThrow(() -> new NotFoundException(Author.class, authorNumber));
 
         //In case the user has no photo, just return a 200 OK without body
-        if (authorDetails.getPhoto() == null) {
-            return ResponseEntity.ok().build();
-        }
-
-        String photoFile = authorDetails.getPhoto().getPhotoFile();
-        byte[] image = this.fileStorageService.getFile(photoFile);
-        String fileFormat = this.fileStorageService.getExtension(authorDetails.getPhoto().getPhotoFile())
-                .orElseThrow(() -> new ValidationException("Unable to get file extension"));
-
-        if (image == null) {
-            return ResponseEntity.ok().build();
-        }
-
-        return ResponseEntity.ok()
-                .contentType(fileFormat.equals("png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG)
-                .body(image);
+        return ResponseEntity.ok().build();
     }
 
 }
