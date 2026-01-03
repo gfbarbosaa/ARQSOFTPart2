@@ -10,16 +10,16 @@ import pt.psoft.g1.psoftg1.configuration.RabbitMQConfig;
 @Component
 public class AuthorCreatedConsumer {
 
-    private final AuthorServiceImpl authorReadService;
+    private final AuthorServiceImpl authorServiceImpl;
 
-    public AuthorCreatedConsumer(AuthorServiceImpl authorReadService) {
-        this.authorReadService = authorReadService;
+    public AuthorCreatedConsumer(AuthorServiceImpl authorServiceImpl) {
+        this.authorServiceImpl = authorServiceImpl;
     }
 
     @RabbitListener(queues = RabbitMQConfig.AUTHOR_CREATED_QUEUE)
     public void consume(AuthorCreatedMessage message) {
 
-        authorReadService.createFromEvent(
+        authorServiceImpl.createFromEvent(
                 message.authorNumber(),
                 message.name(),
                 message.bio(),

@@ -28,35 +28,56 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author create(final CreateAuthorRequest resource) {
-        /*
-         * Since photos can be null (no photo uploaded) that means the URI can be null as well.
-         * To avoid the client sending false data, photoURI has to be set to any value / null
-         * according to the MultipartFile photo object
-         *
-         * That means:
-         * - photo = null && photoURI = null -> photo is removed
-         * - photo = null && photoURI = validString -> ignored
-         * - photo = validFile && photoURI = null -> ignored
-         * - photo = validFile && photoURI = validString -> photo is set
-         * */
 
         MultipartFile photo = resource.getPhoto();
         String photoURI = resource.getPhotoURI();
+
         if (photo == null && photoURI != null || photo != null && photoURI == null) {
             resource.setPhoto(null);
             resource.setPhotoURI(null);
         }
+
+        Author author = mapper.create(resource);
+
+        Author saved = authorRepository.save(author);
+
         publisher.publishAuthorCreated(
                 new AuthorCreatedMessage(
                         saved.getAuthorNumber(),
                         saved.getName(),
                         saved.getBio(),
-                        saved.getPhoto() != null ? saved.getPhoto().getPhotoFile() : null,
+                        saved.getPhoto() != null
+                        ? saved.getPhoto().getPhotoFile()
+                        : null,
                         UUID.randomUUID()
                 )
         );
-        final Author author = mapper.create(resource);
-        return authorRepository.save(author);
+
+        return saved;
+    }
+
+    public void createFromEvent(
+            Long authorNumber,
+            String name,
+            String bio,
+            String photoUri
+    ) {
+        // 🔒 Idempotência: se já existe, ignora o evento
+        boolean exists = authorRepository.existsByAuthorNumber(authorNumber);
+        if (exists) {
+            return;
+        }
+
+        Author author = new Author();
+        author.setAuthorNumber(authorNumber);
+        author.setName(name);
+        author.setBio(bio);
+
+        if (photoUri != null) {
+            author.addPhoto(photoUri);
+        }
+
+        authorRepository.save(author);
     }
 
     @Override

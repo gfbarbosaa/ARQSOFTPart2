@@ -2,6 +2,11 @@ package pt.psoft.g1.psoftg1.authormanagement.api.Publisher;
 
 import org.springframework.stereotype.Component;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import pt.psoft.g1.psoftg1.authormanagement.model.messages.AuthorCreatedMessage;
+import pt.psoft.g1.psoftg1.authormanagement.services.AuthorMessagePublisher;
+import pt.psoft.g1.psoftg1.configuration.RabbitMQConfig;
+
 @Component
 public class RabbitMQAuthorPublisher implements AuthorMessagePublisher {
 
