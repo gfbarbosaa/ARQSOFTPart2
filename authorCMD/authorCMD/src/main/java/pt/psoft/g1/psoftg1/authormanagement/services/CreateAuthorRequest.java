@@ -6,12 +6,12 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "A DTO for creating a Author")
 public class CreateAuthorRequest {
+
     @Size(min = 1, max = 150)
     private String name;
 
@@ -27,4 +27,5 @@ public class CreateAuthorRequest {
     @Getter
     @Setter
     private String photoURI;
+
 }

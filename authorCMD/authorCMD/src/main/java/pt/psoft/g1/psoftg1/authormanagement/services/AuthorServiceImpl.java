@@ -15,12 +15,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorRepository authorRepository;
-    private final AuthorMapper mapper;
-    private final PhotoRepository photoRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    private AuthorRepository authorRepository;
+    @org.springframework.beans.factory.annotation.Autowired
+    private AuthorMapper mapper;
+    @org.springframework.beans.factory.annotation.Autowired
+    private PhotoRepository photoRepository;
 
     @Override
     public Author create(final CreateAuthorRequest resource) {

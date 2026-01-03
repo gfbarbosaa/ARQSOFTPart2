@@ -105,9 +105,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/readers").permitAll() //unregistered should be able to register
                 // Our private endpoints
                 //authors
-                .requestMatchers(HttpMethod.POST, "/api/authors").hasRole()
-                .requestMatchers(HttpMethod.PATCH, "/api/authors/{authorNumber}").hasRole()
-                .requestMatchers(HttpMethod.DELETE, "/api/authors/{authorNumber}/photo").hasAnyRole()
+                .requestMatchers(HttpMethod.POST, "/api/authors").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/api/authors/{authorNumber}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/authors/{authorNumber}/photo").hasAnyRole("ADMIN", "MODERATOR")
                 //end authors
                 .anyRequest().authenticated()
                 // Set up oauth2 resource server
