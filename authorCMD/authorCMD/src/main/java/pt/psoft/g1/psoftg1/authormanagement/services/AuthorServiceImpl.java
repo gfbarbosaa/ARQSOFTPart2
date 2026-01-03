@@ -24,7 +24,7 @@ public class AuthorServiceImpl implements AuthorService {
     @org.springframework.beans.factory.annotation.Autowired
     private PhotoRepository photoRepository;
     @org.springframework.beans.factory.annotation.Autowired
-    private final AuthorMessagePublisher publisher;
+    private AuthorMessagePublisher publisher;
 
     @Override
     public Author create(final CreateAuthorRequest resource) {
