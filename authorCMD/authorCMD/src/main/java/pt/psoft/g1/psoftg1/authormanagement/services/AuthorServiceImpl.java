@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pt.psoft.g1.psoftg1.authormanagement.api.AuthorLendingView;
 import pt.psoft.g1.psoftg1.authormanagement.model.Author;
+import pt.psoft.g1.psoftg1.authormanagement.model.messages.AuthorCreatedMessage;
 import pt.psoft.g1.psoftg1.authormanagement.repositories.AuthorRepository;
 import pt.psoft.g1.psoftg1.exceptions.NotFoundException;
 import pt.psoft.g1.psoftg1.shared.repositories.PhotoRepository;
@@ -23,6 +24,7 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorMapper mapper;
     @org.springframework.beans.factory.annotation.Autowired
     private PhotoRepository photoRepository;
+    private final AuthorMessagePublisher publisher;
 
     @Override
     public Author create(final CreateAuthorRequest resource) {
@@ -44,8 +46,14 @@ public class AuthorServiceImpl implements AuthorService {
             resource.setPhoto(null);
             resource.setPhotoURI(null);
         }
-        eventPublisher.publish(
-                new AuthorCreatedEvent(author.getAuthorNumber(), author.getName())
+        publisher.publishAuthorCreated(
+                new AuthorCreatedMessage(
+                        saved.getAuthorNumber(),
+                        saved.getName(),
+                        saved.getBio(),
+                        saved.getPhoto() != null ? saved.getPhoto().getPhotoFile() : null,
+                        UUID.randomUUID()
+                )
         );
         final Author author = mapper.create(resource);
         return authorRepository.save(author);

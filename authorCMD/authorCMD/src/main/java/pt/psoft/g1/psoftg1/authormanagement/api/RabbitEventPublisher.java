@@ -19,6 +19,3 @@ public class RabbitEventPublisher implements DomainEventPublisher {
         );
     }
 }
-{
-    
-}
