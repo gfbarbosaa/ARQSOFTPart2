@@ -13,6 +13,7 @@ import pt.psoft.g1.psoftg1.exceptions.NotFoundException;
 import pt.psoft.g1.psoftg1.shared.repositories.PhotoRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
@@ -43,7 +44,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         publisher.publishAuthorCreated(
                 new AuthorCreatedMessage(
-                        saved.getAuthorNumber(),
+                        (Long) saved.getAuthorNumber(),
                         saved.getName(),
                         saved.getBio(),
                         saved.getPhoto() != null
@@ -64,12 +65,12 @@ public class AuthorServiceImpl implements AuthorService {
     ) {
 
         Author author = new Author();
-        author.setAuthorNumber(authorNumber);
+        ((Object) author).setAuthorNumber(authorNumber);
         author.setName(name);
         author.setBio(bio);
 
         if (photoUri != null) {
-            author.addPhoto(photoUri);
+            author.setPhoto(photoUri);
         }
 
         authorRepository.save(author);
@@ -97,6 +98,7 @@ public class AuthorServiceImpl implements AuthorService {
             request.setPhoto(null);
             request.setPhotoURI(null);
         }
+        Author author = null;
         // since we got the object from the database we can check the version in memory
         // and apply the patch
         author.applyPatch(desiredVersion, request);
@@ -112,7 +114,7 @@ public class AuthorServiceImpl implements AuthorService {
         Author author = authorRepository.findByAuthorNumber(authorNumber)
                 .orElseThrow(() -> new NotFoundException("Cannot find reader"));
 
-        String photoFile = author.getPhoto().getPhotoFile();
+        String photoFile = ((Object) author.getPhoto()).getPhotoFile();
         author.removePhoto(desiredVersion);
         Optional<Author> updatedAuthor = Optional.of(authorRepository.save(author));
         photoRepository.deleteByPhotoFile(photoFile);

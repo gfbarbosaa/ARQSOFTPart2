@@ -21,14 +21,13 @@ import java.util.Optional;
 @Order(1)
 public class UserBootstrapper implements CommandLineRunner {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate = null;
     private List<String> queriesToExecute = new ArrayList<>();
 
     @Override
     @Transactional
     public void run(final String... args) {
-        createReaders();
-        createLibrarian();
+
         executeQueries();
     }
 

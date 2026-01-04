@@ -14,4 +14,8 @@ public interface AuthorRepository {
 
     void delete(Author author);
 
+    String searchByNameName(String string);
+
+    Optional<Author> findByAuthorNumber(Long authorNumber);
+
 }

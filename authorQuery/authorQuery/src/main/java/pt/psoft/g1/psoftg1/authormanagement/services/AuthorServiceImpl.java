@@ -67,13 +67,10 @@ public class AuthorServiceImpl implements AuthorService {
             String photoUri
     ) {
 
-        Author author = new Author();
-        author.setAuthorNumber(authorNumber);
-        author.setName(name);
-        author.setBio(bio);
+        Author author = Author.create(authorNumber, name, bio);
 
         if (photoUri != null) {
-            author.addPhoto(photoUri);
+            author.setPhoto(photoUri);
         }
 
         authorRepository.save(author);

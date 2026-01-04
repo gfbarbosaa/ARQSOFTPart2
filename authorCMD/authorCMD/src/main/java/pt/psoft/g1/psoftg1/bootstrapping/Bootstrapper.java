@@ -33,9 +33,10 @@ public class Bootstrapper implements CommandLineRunner {
     private int fineValuePerDayInCents;
 
     private final AuthorRepository authorRepository;
-    private final PhotoRepository photoRepository;
 
-    private final ForbiddenNameService forbiddenNameService;
+    public Bootstrapper() {
+        this.authorRepository = null;
+    }
 
     @Override
     @Transactional

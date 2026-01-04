@@ -48,7 +48,7 @@ public class Author extends EntityWithPhoto {
         setPhotoInternal(photoURI);
     }
 
-    protected Author() {
+    public Author() {
         // got ORM only
     }
 
@@ -57,13 +57,13 @@ public class Author extends EntityWithPhoto {
             throw new StaleObjectStateException("Object was already modified by another user", this.authorNumber);
         }
         if (request.getName() != null) {
-            setName(request.getName());
+            setName((String) request.getName());
         }
         if (request.bio() != null) {
-            setBio(request.bio());
+            setBio((String) request.bio());
         }
         if (request.photoURI() != null) {
-            setPhotoInternal(request.photoURI());
+            setPhotoInternal((String) request.photoURI());
         }
     }
 
@@ -82,4 +82,5 @@ public class Author extends EntityWithPhoto {
     public String getBio() {
         return this.bio.toString();
     }
+
 }

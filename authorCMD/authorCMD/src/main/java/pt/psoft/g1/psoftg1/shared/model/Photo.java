@@ -12,8 +12,9 @@ import java.nio.file.Path;
 
 @Entity
 public class Photo {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long pk;
 
     @NotNull
@@ -21,10 +22,14 @@ public class Photo {
     @Getter
     private String photoFile;
 
-    protected Photo (){}
+    protected Photo() {
+    }
 
-    public Photo (Path photoPath){
+    public Photo(Path photoPath) {
         setPhotoFile(photoPath.toString());
     }
-}
 
+    private void setPhotoFile(String toString) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+}
