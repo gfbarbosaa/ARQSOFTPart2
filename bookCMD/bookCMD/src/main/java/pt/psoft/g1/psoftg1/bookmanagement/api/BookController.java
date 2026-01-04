@@ -43,9 +43,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/books")
 public class BookController {
 
-    private final BookService bookService;
+    private final BookService bookService = null;
 
-    private final BookViewMapper bookViewMapper;
+    private final BookViewMapper bookViewMapper = null;
 
     @Operation(summary = "Register a new Book")
     @PutMapping(value = "/{isbn}")

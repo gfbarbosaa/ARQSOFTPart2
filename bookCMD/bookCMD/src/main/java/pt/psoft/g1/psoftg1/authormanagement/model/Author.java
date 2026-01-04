@@ -24,4 +24,9 @@ public class Author extends EntityWithPhoto {
     protected Author() {
         // got ORM only
     }
+
+    public long getVersion() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getVersion'");
+    }
 }

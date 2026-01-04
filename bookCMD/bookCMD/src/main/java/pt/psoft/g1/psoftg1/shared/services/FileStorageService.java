@@ -82,4 +82,21 @@ public class FileStorageService {
         }
     }
 
+    public String getRequestPhoto(MultipartFile file) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRequestPhoto'");
+    }
+
+    public String getRequestPhoto(MultipartFile file) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getRequestPhoto(MultipartFile file) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public String getRequestPhoto(MultipartFile file) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

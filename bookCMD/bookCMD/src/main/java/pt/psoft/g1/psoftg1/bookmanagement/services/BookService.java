@@ -15,4 +15,6 @@ public interface BookService {
     Book save(Book book);
 
     Book update(UpdateBookRequest request, String currentVersion);
+
+    Object findByIsbn(String isbn);
 }

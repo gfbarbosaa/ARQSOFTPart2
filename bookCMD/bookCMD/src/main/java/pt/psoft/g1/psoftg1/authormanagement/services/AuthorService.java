@@ -6,7 +6,11 @@ import pt.psoft.g1.psoftg1.bookmanagement.model.Book;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
+
 public interface AuthorService {
 
     Author create(CreateAuthorRequest resource);
+
+    Author partialUpdate(Long authorNumber, UpdateAuthorRequest resource, Long versionFromIfMatchHeader);
 }
