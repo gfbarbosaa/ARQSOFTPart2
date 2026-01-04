@@ -74,7 +74,11 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-
+<!-- AMQP Rabbit mq-->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-amqp</artifactId>
+				</dependency>
 		<!-- validation of requests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
