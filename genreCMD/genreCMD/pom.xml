@@ -45,7 +45,11 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
+			<!-- AMQP Rabbit mq-->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-amqp</artifactId>
+				</dependency>
 		<!-- security, authentication & authorization -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
