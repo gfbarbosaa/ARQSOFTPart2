@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAuthorRequest {
+
     @Size(max = 4096)
     private String bio;
 
@@ -24,4 +25,13 @@ public class UpdateAuthorRequest {
     @Getter
     @Setter
     private String photoURI;
+
+    public MultipartFile getPhoto() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setPhotoURI(String fileName) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

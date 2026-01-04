@@ -28,4 +28,20 @@ public class CreateAuthorRequest {
     @Setter
     private String photoURI;
 
+    MultipartFile getPhoto() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    String getPhotoURI() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void setPhoto(Object object) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    void setPhotoURI(Object object) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

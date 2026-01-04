@@ -67,4 +67,9 @@ public class Author extends EntityWithPhoto {
     public String getBio() {
         return this.bio.toString();
     }
+
+    public static Author create(Long authorNumber2, String name2, String bio2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'create'");
+    }
 }

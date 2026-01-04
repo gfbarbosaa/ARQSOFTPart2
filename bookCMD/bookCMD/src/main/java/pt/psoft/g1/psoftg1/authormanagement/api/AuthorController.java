@@ -28,7 +28,6 @@ import pt.psoft.g1.psoftg1.readermanagement.model.ReaderDetails;
 import pt.psoft.g1.psoftg1.shared.api.ListResponse;
 import pt.psoft.g1.psoftg1.shared.services.ConcurrencyService;
 import pt.psoft.g1.psoftg1.shared.services.FileStorageService;
-import pt.psoft.g1.psoftg1.usermanagement.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,17 +39,16 @@ import java.util.Optional;
 @RequestMapping("/api/authors")
 public class AuthorController {
 
-    private final AuthorService authorService;
-    private final AuthorViewMapper authorViewMapper;
-    private final ConcurrencyService concurrencyService;
-    private final FileStorageService fileStorageService;
-    private final BookViewMapper bookViewMapper;
+    private final AuthorService authorService = null;
+    private final AuthorViewMapper authorViewMapper = null;
+    private final ConcurrencyService concurrencyService = null;
+    private final FileStorageService fileStorageService = null;
 
     //Create
     @Operation(summary = "Creates a new Author")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<AuthorView> create(@Valid CreateAuthorRequest resource) {
+    public ResponseEntity<Object> create(@Valid CreateAuthorRequest resource) {
         //Guarantee that the client doesn't provide a link on the body, null = no photo or error
         resource.setPhotoURI(null);
         MultipartFile file = resource.getPhoto();
@@ -74,7 +72,7 @@ public class AuthorController {
     //Update
     @Operation(summary = "Updates a specific author")
     @PatchMapping(value = "/{authorNumber}")
-    public ResponseEntity<AuthorView> partialUpdate(
+    public ResponseEntity<Object> partialUpdate(
             @PathVariable("authorNumber")
             @Parameter(description = "The number of the Author to find") final Long authorNumber,
             final WebRequest request,

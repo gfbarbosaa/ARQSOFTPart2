@@ -15,4 +15,14 @@ public class CreateAuthorRequest {
     @Size(max = 4096)
     private long AuthorNumber;
 
+    public MultipartFile getPhoto() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPhoto'");
+    }
+
+    public void setPhotoURI(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPhotoURI'");
+    }
+
 }

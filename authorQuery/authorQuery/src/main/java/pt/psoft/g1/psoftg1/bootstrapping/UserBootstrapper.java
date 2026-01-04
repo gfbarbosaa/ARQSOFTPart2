@@ -19,6 +19,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Profile("bootstrap")
 @Order(1)
-public class UserBootstrapper implements CommandLineRunner {
+public class UserBootstrapper implements CommandLineRunner {@Override
+    public void run(String... args) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'run'");
+    }
 
 }

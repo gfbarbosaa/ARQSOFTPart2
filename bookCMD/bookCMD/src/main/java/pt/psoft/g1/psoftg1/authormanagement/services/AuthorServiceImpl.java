@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository = null;
 
     @Override
     public Author create(final CreateAuthorRequest resource) {
